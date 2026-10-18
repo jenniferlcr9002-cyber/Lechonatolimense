@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego sobre la Lechona Tolimense</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f8f5ed, #e1eee5);
+    color: #26352f;
+    font-size: 18px;
+}
+
+header {
+    background: linear-gradient(120deg, #123d32, #17634b, #278064);
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+    border-bottom: 7px solid #d9b45b;
+}
+
+header h1 {
+    font-size: clamp(30px, 6vw, 45px);
+    margin: 12px 0;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 10px;
+    background: white;
+}
+
+nav a {
+    background: #175b45;
+    color: white;
+    padding: 11px 15px;
+    border: 2px solid #d9b45b;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    background: #d9b45b;
+    color: #173d31;
+}
+
+main {
+    max-width: 850px;
+    margin: 35px auto;
+    padding: 0 16px;
+}
+
+.tarjeta {
+    background: white;
+    border-top: 6px solid #d9b45b;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px #193d2c18;
+}
+
+h2 {
+    color: #175b45;
+    font-size: 28px;
+}
+
+.inicio {
+    text-align: center;
+}
+
+.icono {
+    font-size: 65px;
+    margin: 10px;
+}
+
+#progreso {
+    height: 12px;
+    background: #e4ece5;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 18px 0;
+}
+
+#barra {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #17634b, #d9b45b);
+    transition: width 0.3s;
+}
+
+#pregunta {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 25px 0;
+}
+
+#opciones {
+    display: grid;
+    gap: 13px;
+}
+
+.opcion {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    text-align: left;
+    background: #f4f7f3;
+    color: #26352f;
+    border: 2px solid #d7e3d8;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.opcion:hover:not(:disabled) {
+    background: #e3f0e5;
+    border-color: #17634b;
+}
+
+.opcion:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+.correcta {
+    background: #d9f3df !important;
+    border-color: #218348 !important;
+    color: #155b32 !important;
+}
+
+.incorrecta {
+    background: #fbe3df !important;
+    border-color: #c44a3c !important;
+    color: #8a2d23 !important;
+}
+
+#mensaje {
+    margin-top: 20px;
+    line-height: 1.7;
+    font-weight: bold;
+}
+
+.boton {
+    width: 100%;
+    margin-top: 22px;
+    padding: 16px;
+    background: #175b45;
+    color: white;
+    border: none;
+    border-radius: 11px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background: #247454;
+}
+
+.oculto {
+    display: none;
+}
+
+#resultado {
+    text-align: center;
+}
+
+#resultado h2 {
+    font-size: 32px;
+}
+
+footer {
+    background: #123d32;
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+    border-top: 6px solid #d9b45b;
+}
+
+@media (max-width: 600px) {
+    .tarjeta {
+        padding: 21px 17px;
+    }
+
+    #pregunta {
+        font-size: 21px;
+    }
+
+    .opcion {
+        font-size: 16px;
+    }
+
+    nav a {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 Juego sobre la Lechona</h1>
+</header>
+
+<nav>
+    <a href="index.html">Inicio / Home</a>
+    <a href="receta.html">Receta / Recipe</a>
+    <a href="cultura.html">Historia / History</a>
+    <a href="bioquimica.html">Bioquímica</a>
+    <a href="explicaciones.html">Nutrientes</a>
+    <a href="salud.html">Salud / Health</a>
+    <a href="audio.html">Audio</a>
+    <a href="juego.html">Juego / Game</a>
+</nav>
+
+<main>
+
+    <section class="tarjeta inicio" id="inicio">
+        <div class="icono"></div>
+        <h2>¡Demuestra cuánto sabes!</h2>
+
+        <p>
+            Responde las preguntas sobre la historia, los ingredientes,
+            la cultura y los nutrientes de la lechona tolimense.
+        </p>
+
+        <p>
+            Answer the questions and discover how much you know
+            about this traditional Colombian dish.
+        </p>
+
+        <p><strong>10 preguntas · 10 puntos posibles</strong></p>
+
+        <button class="boton" onclick="iniciarJuego()">
+            ¡Comenzar juego! ▶️
+        </button>
+    </section>
+
+    <section class="tarjeta oculto" id="juego">
+        <p id="numero">Pregunta 1 de 10</p>
+
+        <div id="progreso">
+            <div id="barra"></div>
+        </div>
+
+        <p><strong>Puntos: <span id="puntos">0</span></strong></p>
+
+        <div id="pregunta"></div>
+        <div id="opciones"></div>
+
+        <div id="mensaje" aria-live="polite"></div>
+
+        <button class="boton oculto" id="siguiente"
+                onclick="siguientePregunta()">
+            Siguiente pregunta
+        </button>
+    </section>
+
+    <section class="tarjeta oculto" id="resultado">
+        <div class="icono" id="emojiFinal">🏆</div>
+        <h2>¡Juego terminado!</h2>
+        <p id="calificacion"></p>
+        <p id="comentario"></p>
+
+        <button class="boton" onclick="reiniciarJuego()">
+            🔄 Jugar de nuevo
+        </button>
+
+        <button class="boton" onclick="volverInicio()">
+            Volver al inicio
+        </button>
+    </section>
+
+</main>
+
+
+<script>
+const preguntas = [
+    {
+        pregunta: "1. ¿De qué departamento de Colombia es típica la lechona?",
+        opciones: ["Antioquia", "Tolima", "Amazonas", "La Guajira"],
+        correcta: 1,
+        explicacion: "La lechona es uno de los platos más representativos del Tolima."
+    },
+    {
+        pregunta: "2. ¿Cuál es uno de los ingredientes principales de la lechona?",
+        opciones: ["Pescado", "Carne de cerdo", "Pollo únicamente", "Yuca únicamente"],
+        correcta: 1,
+        explicacion: "La carne de cerdo es uno de los ingredientes principales."
+    },
+    {
+        pregunta: "3. ¿Qué legumbre se utiliza tradicionalmente en la lechona tolimense?",
+        opciones: ["Lenteja roja", "Fríjol negro", "Arveja amarilla", "Garbanzo dulce"],
+        correcta: 2,
+        explicacion: "La arveja amarilla es un ingrediente tradicional de la preparación."
+    },
+    {
+        pregunta: "4. ¿Cuál de estos municipios está relacionado con la tradición de la lechona?",
+        opciones: ["El Espinal", "Leticia", "Riohacha", "Quibdó"],
+        correcta: 0,
+        explicacion: "El Espinal es reconocido por su tradición lechonera."
+    },
+    {
+        pregunta: "5. ¿En qué ocasiones se suele compartir la lechona?",
+        opciones: [
+            "En reuniones familiares y celebraciones",
+            "Solamente en los hospitales",
+            "Únicamente en los desayunos",
+            "Solo durante los viajes"
+        ],
+        correcta: 0,
+        explicacion: "La lechona suele compartirse en reuniones, fiestas y celebraciones."
+    },
+    {
+        pregunta: "6. ¿Qué nutriente aporta la carne de cerdo?",
+        opciones: ["Fibra exclusivamente", "Proteínas", "Azúcar únicamente", "Vitamina C exclusivamente"],
+        correcta: 1,
+        explicacion: "La carne de cerdo aporta proteínas, necesarias para el organismo."
+    },
+    {
+        pregunta: "7. ¿Qué representa la lechona para la cultura del Tolima?",
+        opciones: [
+            "Una tradición gastronómica",
+            "Un deporte regional",
+            "Un instrumento musical",
+            "Una danza extranjera"
+        ],
+        correcta: 0,
+        explicacion: "La lechona forma parte de la identidad gastronómica del Tolima."
+    },
+    {
+        pregunta: "8. What is lechona tolimense?",
+        opciones: [
+            "A traditional Colombian dish",
+            "A tropical fruit",
+            "A musical instrument",
+            "A type of drink"
+        ],
+        correcta: 0,
+        explicacion: "Correct! Lechona tolimense is a traditional Colombian dish."
+    },
+    {
+        pregunta: "9. ¿Qué estudia la bioquímica de los alimentos?",
+        opciones: [
+            "El diseño de los restaurantes",
+            "Las sustancias y reacciones químicas de los alimentos",
+            "Los mapas de las ciudades",
+            "La decoración de las mesas"
+        ],
+        correcta: 1,
+        explicacion: "La bioquímica estudia las sustancias y reacciones químicas presentes en los alimentos."
+    },
+    {
+        pregunta: "10. ¿Qué ayuda a mantener una alimentación equilibrada?",
+        opciones: [
+            "Comer siempre el mismo alimento",
+            "Ignorar las porciones",
+            "Consumir variedad de alimentos y cuidar las porciones",
+            "Evitar todos los nutrientes"
+        ],
+        correcta: 2,
+        explicacion: "Una alimentación variada y porciones adecuadas ayudan a mantener el equilibrio nutricional."
+    }
+];
+
+let indice = 0;
+let puntaje = 0;
+let respondida = false;
+
+function iniciarJuego() {
+    indice = 0;
+    puntaje = 0;
+
+    document.getElementById("inicio").classList.add("oculto");
+    document.getElementById("resultado").classList.add("oculto");
+    document.getElementById("juego").classList.remove("oculto");
+
+    mostrarPregunta();
+}
+
+function mostrarPregunta() {
+    respondida = false;
+
+    const p = preguntas[indice];
+
+    document.getElementById("numero").textContent =
+        "Pregunta " + (indice + 1) + " de " + preguntas.length;
+
+    document.getElementById("puntos").textContent = puntaje;
+    document.getElementById("barra").style.width =
+        (indice / preguntas.length * 100) + "%";
+
+    document.getElementById("pregunta").textContent = p.pregunta;
+    document.getElementById("mensaje").textContent = "";
+
+    document.getElementById("siguiente").classList.add("oculto");
+
+    const contenedor = document.getElementById("opciones");
+    contenedor.innerHTML = "";
+
+    p.opciones.forEach(function(opcion, i) {
+        const boton = document.createElement("button");
+
+        boton.className = "opcion";
+        boton.textContent = String.fromCharCode(65 + i) + ". " + opcion;
+
+        boton.onclick = function() {
+            comprobarRespuesta(i, boton);
+        };
+
+        contenedor.appendChild(boton);
+    });
+}
+
+function comprobarRespuesta(seleccion, botonElegido) {
+    if (respondida) return;
+
+    respondida = true;
+
+    const p = preguntas[indice];
+    const botones = document.querySelectorAll(".opcion");
+
+    botones.forEach(function(boton, i) {
+        boton.disabled = true;
+
+        if (i === p.correcta) {
+            boton.classList.add("correcta");
+        }
+    });
+
+    if (seleccion === p.correcta) {
+        puntaje++;
+
+        document.getElementById("mensaje").textContent =
+            "✅ ¡Respuesta correcta! " + p.explicacion;
+    } else {
+        botonElegido.classList.add("incorrecta");
+
+        document.getElementById("mensaje").textContent =
+            "❌ Respuesta incorrecta. " + p.explicacion;
+    }
+
+    document.getElementById("puntos").textContent = puntaje;
+
+    document.getElementById("barra").style.width =
+        ((indice + 1) / preguntas.length * 100) + "%";
+
+    const siguiente = document.getElementById("siguiente");
+
+    siguiente.classList.remove("oculto");
+
+    siguiente.textContent =
+        indice === preguntas.length - 1
+        ? "Ver resultado 🏆"
+        : "Siguiente pregunta ➜";
+}
+
+function siguientePregunta() {
+    if (!respondida) return;
+
+    indice++;
+
+    if (indice < preguntas.length) {
+        mostrarPregunta();
+    } else {
+        mostrarResultado();
+    }
+}
+
+function mostrarResultado() {
+    document.getElementById("juego").classList.add("oculto");
+    document.getElementById("resultado").classList.remove("oculto");
+
+    document.getElementById("calificacion").textContent =
+        "Tu puntuación: " + puntaje + " de " + preguntas.length + " puntos.";
+
+    let comentario;
+    let emoji;
+
+    if (puntaje >= 9) {
+        comentario = "¡Excelente! Eres un experto en la lechona tolimense.";
+        emoji = "🏆";
+    } else if (puntaje >= 7) {
+        comentario = "¡Muy bien! Conoces bastante sobre este plato tradicional.";
+        emoji = "🥇";
+    } else if (puntaje >= 5) {
+        comentario = "¡Buen trabajo! Sigue aprendiendo sobre la cultura del Tolima.";
+        emoji = "👏";
+    } else {
+        comentario = "¡Sigue intentando! Vuelve a jugar y aprende algo nuevo.";
+        emoji = "🐷";
+    }
+
+    document.getElementById("comentario").textContent = comentario;
+    document.getElementById("emojiFinal").textContent = emoji;
+}
+
+function reiniciarJuego() {
+    iniciarJuego();
+
+    document.getElementById("juego").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function volverInicio() {
+    document.getElementById("juego").classList.add("oculto");
+    document.getElementById("resultado").classList.add("oculto");
+    document.getElementById("inicio").classList.remove("oculto");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+</script>
+
+</body>
+</html>
